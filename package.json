@@ -6,7 +6,9 @@
     "type": "module",
     "scripts": {
         "build:dev": "webpack --mode development",
+        "build:prod": "webpack --mode production",
         "start:dev": "nodemon",
+        "start:prod": "npm run build:prod && node dist/main.js",
         "test": "jest",
         "test:verbose": "jest --verbose",
         "eslint": "npx eslint ."
