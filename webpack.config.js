@@ -1,30 +1,47 @@
 import path from 'path';
-import { fileURLToPath } from 'url';
+import nodeExternals from 'webpack-node-externals';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+export default (_, argv) => {
+  const isDev = argv.mode === 'development';
 
-export default {
+  return {
     entry: './src/index.ts',
     output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist'),
-        clean: true,
+      filename: 'main.js',
+      path: path.resolve(import.meta.dirname, 'dist'),
+      module: true,
+      chunkFormat: 'module',
+      clean: true,
     },
     resolve: {
-        extensions: ['.ts', '.js'],
+      extensions: ['.ts', '.js'],
     },
+    experiments: {
+      outputModule: true,
+    },
+    externals: [
+      nodeExternals({
+        allowlist: isDev ? [] : ['dotenv/config', 'uuid'],
+        importType: 'module',
+      }),
+    ],
     module: {
-        rules: [
+      rules: [
         {
-            test: /\.ts$/,
-            use: 'ts-loader',
-            exclude: /node_modules/,
+          test: /\.ts$/,
+          use: [
+            {
+              loader: 'ts-loader',
+              options: {
+                onlyCompileBundledFiles: true,
+              },
+            },
+          ],
+          exclude: /node_modules/,
         },
-        {
-            test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-            type: 'asset',
-        },
-        ],
+      ],
     },
-    mode: 'production',
+    target: 'node',
+    devtool: isDev ? 'inline-source-map' : false,
+  };
 };
