@@ -16,4 +16,5 @@ Implementation of simple CRUD API
 1. **Clone the Repository** - git clone <repository-url>
 2. **Install Dependencies** - npm i
 3. **Change PORT if need** - now using 4000
-4. **Run Application** - **Development Mode** (npm run start:dev),  **Production Mode**  (npm run start:prod)
+4. **Run Application** - **Development Mode** (npm run start:dev (multi instead dev for load balancer)),  **Production Mode**  (npm run start:prod)
+4. **Run Tests** - (npm run test)

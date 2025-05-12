@@ -1,12 +1,7 @@
-module.exports = {
-    testEnvironment: "node",
-    testPathIgnorePatterns: ["/node_modules/"],
-    testMatch: ["**/?(*.)+(test).ts"],
-    moduleFileExtensions: ["ts", "js", "json"],
-    restoreMocks: true,
-    resetMocks: true,
-    moduleDirectories: ["node_modules", "<rootDir>/src"],
+export default {
+    testEnvironment: 'node',
     transform: {
-      "^.+\\.ts?$": "ts-jest",
+      '^.+.tsx?$': ['ts-jest', {}],
     },
+    testMatch: ['**/tests/**/?(*.)+(spec).ts'],
 };
