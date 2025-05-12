@@ -3,6 +3,8 @@ import { IUser } from '../interfaces/user.interface';
 import { db } from '../db/db';
 import { callMiddleware } from '../middleware/middleware';
 import { v4 as uuidv4 } from 'uuid';
+import { MessagesEnum } from '../enums/messages.enum';
+import { StatusCodesEnum } from '../enums/status-codes.enum';
 
 export const postUsers = async (req: IncomingMessage, res: ServerResponse) => {
     try {
@@ -11,9 +13,9 @@ export const postUsers = async (req: IncomingMessage, res: ServerResponse) => {
         const userId = uuidv4();
         updateUser.id = userId;
         db.set(updateUser, userId);
-        callMiddleware(res, 201, updateUser);
-    } catch (err) {
-        console.log(err)
+        callMiddleware(res, StatusCodesEnum.CREATE, updateUser);
+    } catch {
+        callMiddleware(res, StatusCodesEnum.SERVER_ERROR, { message: MessagesEnum.InternalServerError });
     }
 };
 

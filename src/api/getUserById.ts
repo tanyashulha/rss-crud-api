@@ -1,14 +1,24 @@
 import { ServerResponse, IncomingMessage } from 'http';
 import { db } from '../db/db';
 import { callMiddleware } from '../middleware/middleware';
+import { validate } from 'uuid';
+import { CustomError } from '../utils/custom-error.utils';
+import { MessagesEnum } from '../enums/messages.enum';
+import { StatusCodesEnum } from '../enums/status-codes.enum';
 
 export const getUserById = (res: ServerResponse<IncomingMessage>, id: string) => {
     try {
-        if (db.isAlreadyExist(id)) {
-            const user = db.get(id);
-            callMiddleware(res, 200, user);
+        if (validate(id)) {
+            if (db.isAlreadyExist(id)) {
+                const user = db.get(id);
+                callMiddleware(res, StatusCodesEnum.SUCCESS, user);
+            } else {
+                throw new CustomError(StatusCodesEnum.NOT_FOUND, MessagesEnum.UserIsNotExsist);
+            }
+        } else {
+            throw new CustomError(StatusCodesEnum.BAD_REQUEST, MessagesEnum.UserIdIsInvalid);
         }
-    } catch (err) {
-        console.log(err)
+    } catch {
+        callMiddleware(res, StatusCodesEnum.SERVER_ERROR, { message: MessagesEnum.InternalServerError });
     }
 };

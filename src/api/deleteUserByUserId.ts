@@ -1,14 +1,24 @@
 import { db } from '../db/db';
 import { callMiddleware } from '../middleware/middleware';
 import { ServerResponse } from 'node:http';
+import { validate } from 'uuid';
+import { CustomError } from '../utils/custom-error.utils';
+import { MessagesEnum } from '../enums/messages.enum';
+import { StatusCodesEnum } from '../enums/status-codes.enum';
 
 export const deleteUserByUserId = (res: ServerResponse, id: string) => {
     try {
-        if (db.isAlreadyExist(id)) {
-            db.delete(id);
-            callMiddleware(res, 204);
+        if (validate(id)) {
+            if (db.isAlreadyExist(id)) {
+                db.delete(id);
+                callMiddleware(res, StatusCodesEnum.DELETE);
+            } else {
+                throw new CustomError(StatusCodesEnum.NOT_FOUND, MessagesEnum.UserIsNotExsist);
+            }
+        } else {
+            throw new CustomError(StatusCodesEnum.BAD_REQUEST, MessagesEnum.UserIdIsInvalid);
         }
-    } catch (err) {
-        console.log(err)
+    } catch {
+        callMiddleware(res, StatusCodesEnum.SERVER_ERROR, { message: MessagesEnum.InternalServerError });
     }
 };

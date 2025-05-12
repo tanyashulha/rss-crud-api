@@ -1,9 +1,10 @@
 {
-    "execMap": {
-      "ts": "ts-node"
-    },
-    "ignore": [".git", "node_modules", "dist", "tests"],
-    "watch": ["src"],
-    "ext": ".js,.ts",
-    "exec": "npm run build:dev && node dist/main.js"
+  "execMap": {
+    "ts": "ts-node"
+  },
+  "ignore": [".git", "node_modules", "dist", "tests"],
+  "watch": ["src"],
+  "ext": ".js,.ts",
+  "delay": 500,
+  "exec": "npm run build:dev && node dist/main.js"
 }

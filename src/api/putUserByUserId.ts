@@ -2,19 +2,26 @@ import { ServerResponse, IncomingMessage } from 'node:http';
 import { db } from '../db/db';
 import { IUser } from '../interfaces/user.interface';
 import { callMiddleware } from '../middleware/middleware';
+import { validate } from 'uuid';
+import { CustomError } from '../utils/custom-error.utils';
+import { MessagesEnum } from '../enums/messages.enum';
+import { StatusCodesEnum } from '../enums/status-codes.enum';
 
 export const putUserByUserId = async (id: string, res: ServerResponse, req: IncomingMessage) => {
     try {
-        if (db.isAlreadyExist(id)) {
-            const user = await getResponse(req);
-            db.put(user as IUser, id);
-            callMiddleware(res, 200, user);
+        if (validate(id)) {
+            if (db.isAlreadyExist(id)) {
+                const user = await getResponse(req);
+                db.put(user as IUser, id);
+                callMiddleware(res, StatusCodesEnum.SUCCESS, user);
+            } else {
+                throw new CustomError(StatusCodesEnum.BAD_REQUEST, MessagesEnum.InvalidDataInRequest);
+            }
         } else {
-            // 404
-            console.log('User is not exsist')
+            throw new CustomError(StatusCodesEnum.NOT_FOUND, MessagesEnum.UserIsNotExsist);
         }
-    } catch (err) {
-        console.log(err)
+    } catch {
+        callMiddleware(res, StatusCodesEnum.SERVER_ERROR, { message: MessagesEnum.InternalServerError });
     }
 };
 

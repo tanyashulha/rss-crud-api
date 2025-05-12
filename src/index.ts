@@ -7,6 +7,8 @@ import { postUsers } from './api/postUsers';
 import { putUserByUserId } from './api/putUserByUserId';
 import { callMiddleware } from './middleware/middleware';
 import { getUserById } from './api/getUserById';
+import { StatusCodesEnum } from './enums/status-codes.enum';
+import { MessagesEnum } from 'enums/messages.enum';
 
 const PORT = process.env.PORT;
 
@@ -21,8 +23,8 @@ export const main = createServer((req, res) => {
                 break;
             case MethodsEnum.PUT:
                 putUserByUserId(id, res, req).catch(() =>
-                    callMiddleware(res, 500, { message: 'Server error' })
-                  );
+                    callMiddleware(res, StatusCodesEnum.SERVER_ERROR, { message: MessagesEnum.InternalServerError })
+                );
                 break;
             case MethodsEnum.DELETE:
                 deleteUserByUserId(res, id);
@@ -40,7 +42,7 @@ export const main = createServer((req, res) => {
             break;
         case MethodsEnum.POST:
             postUsers(req, res).catch(() =>
-                callMiddleware(res, 500, { message: 'Server error' })
+                callMiddleware(res, StatusCodesEnum.SERVER_ERROR, { message: MessagesEnum.InternalServerError })
             );
             break;
         default:
