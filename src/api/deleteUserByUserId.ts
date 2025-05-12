@@ -5,6 +5,7 @@ import { validate } from 'uuid';
 import { CustomError } from '../utils/custom-error.utils';
 import { MessagesEnum } from '../enums/messages.enum';
 import { StatusCodesEnum } from '../enums/status-codes.enum';
+import { generateError } from '../utils/generate-error.utils';
 
 export const deleteUserByUserId = (res: ServerResponse, id: string) => {
     try {
@@ -18,7 +19,7 @@ export const deleteUserByUserId = (res: ServerResponse, id: string) => {
         } else {
             throw new CustomError(StatusCodesEnum.BAD_REQUEST, MessagesEnum.UserIdIsInvalid);
         }
-    } catch {
-        callMiddleware(res, StatusCodesEnum.SERVER_ERROR, { message: MessagesEnum.InternalServerError });
+    } catch (err) {
+        generateError(err, res);
     }
 };

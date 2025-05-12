@@ -8,6 +8,7 @@ import { MessagesEnum } from '../enums/messages.enum';
 import { StatusCodesEnum } from '../enums/status-codes.enum';
 import { validateUserObj } from '../validators/validate-user-obj.validator';
 import { getResponse } from '../utils/get-response.utils';
+import { generateError } from '../utils/generate-error.utils';
 
 export const putUserByUserId = async (id: string, res: ServerResponse, req: IncomingMessage) => {
     try {
@@ -26,7 +27,7 @@ export const putUserByUserId = async (id: string, res: ServerResponse, req: Inco
         } else {
             throw new CustomError(StatusCodesEnum.BAD_REQUEST, MessagesEnum.InvalidDataInRequest);
         }
-    } catch {
-        callMiddleware(res, StatusCodesEnum.SERVER_ERROR, { message: MessagesEnum.InternalServerError });
+    } catch (err) {
+        generateError(err, res);
     }
 };
