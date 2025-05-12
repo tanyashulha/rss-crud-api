@@ -1,11 +1,10 @@
 import 'dotenv/config';
 import { server } from './create-server';
 import { loadBalancer } from './load-balancer';
-import cluster from 'node:cluster';
 
 const PORT = process.env.PORT;
 
-if (process.env.MULTI === 'true' && cluster.isPrimary) {
+if (process.env.MULTI === 'true') {
     loadBalancer();
 } else {
     server.listen(PORT, () => {
