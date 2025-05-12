@@ -15,7 +15,7 @@ const newObject: IUser = {
     hobbies: ['dolls'],
 };
 
-const invalidID = '454r53b49e-4r4-3366-tgv7-h55jg893jnn77';
+const invalidID = '912f67d5-9073-4270-9142-e7543930fd7d';
 
 describe('RSS CRUD API TESTS', () => {
     const res = request(server);
