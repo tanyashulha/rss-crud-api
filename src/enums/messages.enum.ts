@@ -5,4 +5,6 @@ export const enum MessagesEnum {
     InternalServerError = 'Internal server error',
     UserIsNotExsist = 'User is not exsist',
     InvalidDataInRequest = 'Invalid data in request',
+    LoadBalancerIsRunningOnPort = 'Load Balancer is running on port',
+    WorkerWasKilled = 'Worker was killed',
 }
