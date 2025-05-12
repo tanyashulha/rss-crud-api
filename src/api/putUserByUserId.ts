@@ -7,6 +7,7 @@ import { CustomError } from '../utils/custom-error.utils';
 import { MessagesEnum } from '../enums/messages.enum';
 import { StatusCodesEnum } from '../enums/status-codes.enum';
 import { validateUserObj } from '../validators/validate-user-obj.validator';
+import { getResponse } from '../utils/get-response.utils';
 
 export const putUserByUserId = async (id: string, res: ServerResponse, req: IncomingMessage) => {
     try {
@@ -29,19 +30,3 @@ export const putUserByUserId = async (id: string, res: ServerResponse, req: Inco
         callMiddleware(res, StatusCodesEnum.SERVER_ERROR, { message: MessagesEnum.InternalServerError });
     }
 };
-
-export const getResponse = (req: IncomingMessage): Promise<unknown> =>
-    new Promise((resolve, reject) => {
-    const arrData: Buffer[] = [];
-    req.on('data', (chunk: Buffer) => {
-        arrData.push(chunk);
-    });
-    req.on('end', () => {
-        try {
-            const userObject = JSON.parse(Buffer.concat(arrData).toString()) as unknown;
-            resolve(userObject);
-        } catch (err) {
-            reject(err);
-        }
-    });
-});
